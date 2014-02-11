@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>comptes</title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+ </head>
+
+  <body>
+    <div class="leftcontent">
+      <span>retour &agrave; la feuille de comptes <br><a href="/comptes?mois={{selectedmonth}}&annee={{selectedyear}}">{{selectedmonthname}} {{selectedyear}}</a></span>
+    </div>
+    <div class="maincontent">
+      <table class="Expenses">
+	<thead>
+	  <th width="35%">Date</th>
+	  <th width="65%">Bilan</th>
+	</thead>
+	{% for balance in allbalances %}
+	  <tr>
+	    <td>{{ balance.month }}/{{ balance.year }}</td>
+	    <td>{{ balance.debtor }} doit {{ balance.amount }} euros &agrave; {{ balance.incredit }}</td>
+	  </tr>
+        {% endfor %}
+      </table>
+      <h3>Bilan total</h3>
+      <span class="bilan">{{debtor}} doit {{balance}} euros &agrave; {{incredit}}</span>
+    </div>
+  </body>
+</html>

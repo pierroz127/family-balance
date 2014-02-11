@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>comptes</title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    <script type="text/javascript" src="/scripts/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="/scripts/comptes.js"></script>
+    <script type="text/javascript"> 
+      $(document).ready(function() {
+          $(window).keydown(function(keyEvent){
+              if((keyEvent.keyCode == 13) && $('#taxratio').is(":visible")) {
+                  keyEvent.preventDefault();
+              }
+          });
+          $("a.popin-open").popin({
+             width:540,
+             height:480,
+             className: "mypopin",
+             loaderImg : 'ajax-loader.gif'
+          });
+          initEditLink();
+          initTagEditor();
+          initEditTaxRatio();
+          initOnRemoveClick();
+      });
+    </script> 
+  </head>
+  <body>
+  <div class="container">
+    <div class="leftcontent">
+      <div class="datepicker">
+        <label for="month">Selectionnez un mois</label>
+        <select id="month" onchange="changeDate()"> 
+          {% for m in month_range %}
+	        {% ifequal selectedmonth m.Value %}
+	          <option value="{{ m.Value }}" selected>{{ m.Name }}</option>
+	        {% else %}
+	          <option value="{{ m.Value }}">{{ m.Name }}</option>
+	        {% endifequal %}
+	      {% endfor %}
+        </select>
+        <label for="year">S&eacute;lectionnez une ann&eacute;e</label>
+        <select id="year" onchange="changeDate()">
+	      {% for y in year_range %}
+	        {% ifequal y selectedyear %}
+  	          <option value="{{ y }}" selected>{{ y }}</option>
+	        {% else %}
+  	          <option value="{{ y }}">{{ y }}</option>
+	        {% endifequal %}
+	      {% endfor %}
+        </select>
+        mois <a href="/comptes?mois={{ previousmonth }}&annee={{ previousyear }}">pr&eacute;c&eacute;dent</a> ou
+	    <a href="/comptes?mois={{ nextmonth }}&annee={{ nextyear }}">suivant</a>
+      </div>
+    </div>
+    <div class="maincontent">
+      <div class="mainheader">
+        <div style="float:left;">
+          <h2>{{ selectedmonthname }} {{ selectedyear }}</h2>
+        </div>
+        <div class="logout">
+	      <a href="{{ logouturl }}">D&eacute;connexion</a>
+        </div>
+      </div>
+      <div class="expenses">
+	    <form action="/depense?mois={{ selectedmonth }}&annee={{ selectedyear }}" method="post">
+	    {% for usrexp in usersexpenses %}
+	    <h3>{{ usrexp.user }}</h3>
+        <div class="tax-ratio-container">
+            <div class="tax-ratio-title">Coefficient Imp&ocirc;ts:
+                <span class="tax-ratio-value">{{ usrexp.taxratio }}</span>
+            </div>
+            <div class="tax-ratio"></div>
+            {% ifequal usrexp.user currentuser %}
+              <img class="edit-tax-ratio" src="/img/pencil.png"/>
+            {% endifequal %}
+            <div class="tax-ratio-error">Le coefficient d'imp&ocirc;ts doit être un nombre d&eacute;cimal compris entre 0 et 1 !</div>
+        </div>
+	    <table class="expenses">
+	      <tr>
+	        <th width="12%">Date</th>
+	        <th width="24%">Titre</th>
+	        <th width="12%">Montant</th>
+	        <th width="34%">Cat&eacute;gorie(s)</th>
+		    <th width="8%">Type</th>
+	        {% ifequal usrexp.user currentuser %}
+              <th width="10%">Modifier</th>
+            {% endifequal %}
+	      </tr>
+	      {% for exp in usrexp.expenses %}
+	        <tr>
+		      <td class="exp-key" style="display:none;">{{ exp.urlsafe }}</td>
+	  	      <td class="exp-date">{{ exp.date.day }}/{{ exp.date.month }}/{{ exp.date.year }}</td>
+	          <td class="exp-category"><a href="/graphique?categorie={{ exp.category }}" class="popin-open">{{ exp.category }}</a></td>
+	          <!-- amount -->
+	          <td class="exp-amount" style="text-align:right;padding-right:1em;">{{ exp.amount }}</td>
+	          <!-- tags -->
+	          <td class="exp-tag">
+	            {% for tag in exp.tags %}
+	              <span class="tag"><a href="/graphique?categorie={{ tag }}&charttype=tag" class="popin-open">{{ tag }}</a></span>
+	            {% endfor %}
+	          </td>
+		      <td class="exp-type" style="text-align:center;">
+              <!-- ugly django... to replace with jinja -->
+		        {% if exp.exptype == 1 %}
+		          Commun
+		        {% else %}
+                  {% if exp.exptype == 2 %}
+		            Avance
+                  {% else %}
+                    {% if exp.exptype == 3 %}
+                      Personnel
+                    {% else %}
+                      Imp&ocirc;ts
+                    {% endif %}
+                  {% endif %}
+		        {% endif %}
+		      </td>
+	          {% ifequal usrexp.user currentuser %}
+                <td class="exp-modify" align="center">
+		          <img class="edit" src="/img/pencil.png"/>
+		          <span class="remove">
+		            <img src="/img/remove.png">
+		          </span>
+		        </td>
+              {% endifequal %}
+		    </tr>
+	      {% endfor %}
+	      {% ifequal usrexp.user currentuser %}
+		    <tr id="newexpense">
+	          <td><input name="date" type="text" id="date" value="1/{{ selectedmonth }}/{{ selectedyear }}"></input></td>
+	          <td><input name="category" type="text" id="category"/></td>
+	          <td><input name="amount" type="text" id="amount"/></td>
+	          <td id="tageditor-container">
+	          	<input name="tags" type="text" id="tags" style="display:none;" />
+	          	<input id="tageditor" />
+	          </td>
+		      <td>
+		        <select name="type">
+		          <option value="1" selected>Commun</option>
+		          <option value="2">Avance</option>
+	              <option value="3">Personnel</option>
+                  <option value="4">Imp&ocirc;ts</option>
+		        </select>
+		      </td>
+	          <td><input type="submit" value="Add"></td>
+	        </tr>
+	      {% endifequal %}
+	    </table>
+	    <table class="total">
+	      <tr><td>D&eacute;penses personnelles</td><td>{{ usrexp.totalpersonal }}</td></tr>
+	      <tr><td>D&eacute;penses communes</td><td>{{ usrexp.totalcommon }}</td></tr>
+          <tr><td>D&eacute;penses avances</td><td>{{ usrexp.totaladvance }}</td></tr>
+          <tr><td>D&eacute;penses imp&ocirc;ts</td><td>{{ usrexp.totaltax }}</td></tr>
+          <tr><td>D&eacute;penses totales</td><td>{{ usrexp.total }}</td></tr>
+	    </table>
+	  {% endfor %}
+        </form>
+	<h3>Balance de {{ selectedmonthname }} {{ selectedyear }}</h3>
+	<div class="bilan">
+        <span id="status-maxuser">{{ status_maxuser }}</span> -
+        <span id="status-minuser">{{ status_minuser }}</span> =
+        <span id="status-debt">{{ status_debt }} euros</span>
+    </div><br>
+	<span><a href="/bilans">VOIR LE BILAN G&Eacute;N&Eacute;RAL</a></span><br/>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

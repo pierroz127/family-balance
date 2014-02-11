@@ -1,0 +1,4 @@
+cron:
+- description: daily job to compute tags
+  url: /computetags
+  schedule: every 24 hours

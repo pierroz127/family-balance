@@ -1,0 +1,247 @@
+.container {
+	height: auto;
+	overflow: hidden;
+}
+
+.leftcontent {
+    display: block;
+    width: 250px;
+    /*height: 100%;*/
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: small;
+    clear: both;
+    float: left;
+}
+
+.datepicker {
+    border: 1px solid #36C;
+    background-color: #E5ECF9;
+    margin: 0.5em;
+    padding: 0.5em;
+}
+
+.datepicker select {
+    width: 100%;
+    margin: 0.5em 0em;
+}
+
+.maincontent {
+    display: block;
+    //position: absolute;
+    left: 265px;
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: small;
+    //top: 0px;
+    width: auto;
+    overflow: hidden;
+    padding-left: 15px;
+}
+
+.mainheader {
+	width: 100%;	
+}
+
+.expenses {
+    display: table;
+    border-collapse: collapse;
+    border-color: #36C;
+    border-spacing: 0.2em 0.2em;
+    width: 100%;
+    font-size: 1em;
+    margin-top: 5px;
+}
+
+.expenses th {
+    color: #36C;
+    background-color: #E5ECF9;
+    border: 1px solid #36C;
+}
+
+.expenses td {
+    align: right;
+    padding: 0.2em;
+    border: 1px solid #36C;
+}
+
+.edit {
+    text-decoration: underline;
+}
+
+.edit:hover {
+    cursor: pointer;
+}
+
+.remove:hover {
+    cursor: pointer;
+}
+
+.expenses td input {
+    width: 100%;
+    border: none !important;
+	box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	outline: 0 !important;
+	padding: 0 !important;
+	margin: 4px 3px 0;
+	background-color: transparent !important;
+
+}
+
+.maincontent h2 {
+    color: #999;
+}
+.maincontent h3 {
+    border-top: 1px solid #36C;
+    color: #999;
+    padding-top: 1em;
+    width: 100%;
+}
+
+.total {
+    display: table;
+    border-collapse: collapse;
+    border-color: #36C;
+    border-spacing: 0.2em 0.2em;
+    border-width: 0px;
+    width: 50%;
+    font-size: 1em;
+    margin-top: 1em;
+}
+
+.total td {
+    width: 50%;
+    border-width: 0px;
+}
+
+.bilan {
+    display: block;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.logout {
+    float: right;
+    margin: 0.7em;
+}
+
+.mypopin {
+    color:#000000;
+    padding:10px;
+    text-align:justify;
+    text-indent:5px;
+    background:#FFF;
+    border-radius:1em;
+    -moz-border-radius:1em;
+}
+.mypopin .popin-content {
+    padding:10px;
+}
+.mypopin .popin-content p {
+    padding:0;
+    margin:0 0 1em;
+}
+ 
+.chart {
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: small;
+}
+
+.chart h2 {
+    border-bottom: 1px solid #999;
+    color: #999;
+}
+
+.tag {
+	color: #3E6D8E;
+	background-color: #E0EAF1;
+	border-bottom: 1px solid #3E6D8E;
+	border-right: 1px solid #7F9FB6;
+	padding: 3px 4px 3px 4px;
+	margin: 2px 2px 2px 0;
+	text-decoration: none;
+	font-size: 90%;
+	line-height: 2.4;
+	white-space: nowrap;
+}
+
+.tag:hover a:link {
+	background-color: #3E6D8E;
+	color: #E0EAF1;
+}
+
+.tag:hover a:visited {
+	background-color: #3E6D8E;
+	color: #E0EAF1;
+}
+
+.tag:hover a:active {
+	background-color: #3E6D8E;
+	color: #E0EAF1;
+}
+
+.tag a:link {
+	text-decoration: none;
+	color: #3E6D8E;
+}
+
+.tag a:visited {
+	text-decoration: none;
+	color: #3E6D8E;
+}
+
+.tag a:active {
+	text-decoration: none;
+	color: #3E6D8E;
+}
+
+.tag:hover {
+	background-color: #3E6D8E;
+	color: #E0EAF1;
+	border-bottom: 1px solid #37607D;
+	border-right: 1px solid #37607D;
+	text-decoration: none;
+}
+
+.delete-tag {
+	margin-top: 7px;
+	margin-left: 2px;
+	vertical-align:top;
+	width: 16px;
+	height: 14px;
+	display: inline-block;
+	background-image: url('/img/delete-tag.png');
+	background-repeat: no-repeat;
+	overflow: hidden;
+}
+
+#tageditor {
+	margin-left: 5px;
+}
+
+.tax-ratio-container {
+    color: #999;
+    display: inline-block;
+    width: 100%;
+}
+
+.tax-ratio-title {
+    float: left;
+    padding-top: 0.4em;
+}
+
+#tax-ratio {
+    float: left;
+    display: none;
+    margin: 0.1em 0.5em 0em 0em;
+}
+
+.edit-tax-ratio {
+    padding-top: 0.1em;
+    margin-left: 0.4em;
+}
+
+.tax-ratio-error {
+    color: red;
+    display: none;
+}
