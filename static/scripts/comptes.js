@@ -12,13 +12,24 @@ function remove(urlsafe, month, year) {
     }
 }
 
+function initMonthRange() {
+  var months = ["Janvier", "F&eacute;vrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Ao&ucirc;t", "Septembre", "Octobre", "Novembre", "D&eacute;cembre"];
+  for (var i=1; i<13; i++) {
+    $('#month_' + i).html(months[i-1]);
+  }
+  var selectedMonthName = months[parseInt($('#month').html()) - 1];
+  //var oldValue = $('.selected-month').html();
+  //var newValue = oldValue.replace("#SELECTED_MONTH#", selectedMonthName)
+  $('span.selected-month').html(selectedMonthName);
+}
+
 function initOnRemoveClick() {
     $('.remove').click(function(e) {
         var key = $(e.target).parent().parent().parent().find('.exp-key').html();
-        var selectMonth = document.getElementById('month');
-        month = selectMonth.options[selectMonth.selectedIndex].value;
-        var selectYear = document.getElementById('year');
-        year = selectYear.options[selectYear.selectedIndex].value;
+        var selectMonth = $('#month');
+        var month = parseInt(selectMonth.html());
+        var year = parseInt($('#year').html());
+        //year = selectYear.options[selectYear.selectedIndex].value;
         remove(key, month, year);
     });
 }
@@ -111,7 +122,7 @@ function initEditLink() {
 	    var edittype = editrow.find('td.exp-type');
 	    if (edittype) { 
 			var type = edittype.text().trim();
-			var newtype = '<select name="type"><option value="1" ';
+			var newtype = '<select class="form-control" name="type"><option value="1" ';
 			if (type == 'Commun')
 			    newtype = newtype + 'selected';
 			newtype = newtype + '>Commun</option><option value="2" ';
@@ -132,7 +143,7 @@ function initEditLink() {
 	    /* button add */
 	    var editbutton = editrow.find('td.exp-modify');
 	    if (editbutton) { 
-			editbutton.html('<input type="submit" value="Modifier">');
+			editbutton.html('<button class="btn btn-primary btn-sm" type="submit">Modifier</button>');
 	    } 
 	}
 	var newexp = $('#newexpense');
@@ -167,10 +178,11 @@ function initEditTaxRatio() {
     $('.edit-tax-ratio').click(function(e) {
         var editButton = $(e.target);
         var parent = editButton.parent();
-        var element = parent.find(".tax-ratio");
-        var oldRatio = parent.find(".tax-ratio-title .tax-ratio-value");
+        var element = parent.next();
+        //var oldRatio = parent.find(".tax-ratio-title .tax-ratio-value");
+        var oldRatio = editButton.prev();
         var oldRatioValue = oldRatio.text();
-        element.html('<input name="taxratio" type="text" id="taxratio" value="' + oldRatioValue + '"/>').show();
+        element.html('<input name="taxratio" class="form-control" type="text" id="taxratio" value="' + oldRatioValue + '"/>').show();
         oldRatio.hide();
         editButton.hide();
         $('#taxratio').bind('keyup', function(keyEvent) {
@@ -183,7 +195,7 @@ function initEditTaxRatio() {
                        type: "post",
                        data: {
                            taxratio: newRatio,
-                           year: $("#year").val()
+                           year: parseInt($("#year").text())
                        },
                        dataType: "json",
                        success: function(data) {
@@ -192,7 +204,7 @@ function initEditTaxRatio() {
                            editButton.show();
 
                            $('span.tax-ratio-value').each(function() {
-                              if ($(this).parent().siblings('.edit-tax-ratio').length != 0) {
+                              if ($(this).siblings('.edit-tax-ratio').length != 0) {
                                   // this is the ratio that needs to be updated with the value received from the server
                                   $(this).html(data.taxratio).show();
                               } else {
@@ -258,8 +270,6 @@ jQuery.fn.popin = function(o) {
 	var Loader = new Image();
 	Loader.src = settings.loaderImg;
 	
-	ie6 = ($.browser.msie && ($.browser.version == "6.0")) ? true : false;
-
 	// CSS
 	$("body").css("position", "relative");
 	
@@ -270,17 +280,6 @@ jQuery.fn.popin = function(o) {
 			settings.onStart();
 		}
 		
-		if(ie6 == true) {
-			$("#PPNCSS").remove();
-			$("body").append(''
-				+	'<style type="text/css" id="PPNCSS">'
-				+	'.popin-voile {top:expression(documentElement.scrollTop + body.scrollTop + "px")}'
-				+	'.popin {top:expression(documentElement.scrollTop + body.scrollTop + (documentElement.clientHeight/2) - ' + (settings.height/2) + ' + "px")}'
-				+	'</style>'
-				+	'');
-		}
-
-	
 		// Insertion du voile & Verrouillage du scroll	
 		$("body").prepend('<div class="popin-voile"></div>');
 		
@@ -294,45 +293,13 @@ jQuery.fn.popin = function(o) {
 							.css("background-position", "center center")
 							.css("background-repeat", "no-repeat")
 							;
-		if(ie6 == true) {
-			$(".popin-voile")		.css("position",					"absolute")
-									;
-		}
-		else {
-			$(".popin-voile")		.css("top",							0)
-									.css("position",					"fixed")
-									;
-		}
 		
-		// Patch IE6
-		if(ie6 == true) {
-			
-			PPNhtmlScroll 			= document.getElementsByTagName("html")[0].scrollTop;
-			var PPNbodyMargin 		= new Object();
-			PPNbodyMargin.top 		= parseInt($("body").css("margin-top"));
-			PPNbodyMargin.right 	= parseInt($("body").css("margin-right"));
-			PPNbodyMargin.bottom 	= parseInt($("body").css("margin-bottom"));
-			PPNbodyMargin.left 		= parseInt($("body").css("margin-left"));
-			
-			$("html, body").css("height", "100%");
-			$("html, body").css("overflow", "hidden");
-			$("body").height($("body").height());
-			PPNbodyHeight = parseInt($("body").height());
-			$("html, body").css("overflow", "visible");
-			$("html, body").css("overflow-x", "visible");
-			
-			PPNbodyTop = ((PPNbodyMargin.top + PPNbodyMargin.bottom) < PPNhtmlScroll) ? (PPNbodyMargin.top + PPNbodyMargin.bottom - PPNhtmlScroll) : 0;
-			$("body").css("top", PPNbodyTop );		
-			$(".popin-voile").css("top", -(PPNbodyMargin.top + PPNbodyMargin.bottom - PPNhtmlScroll) );
-			$(".popin-voile").css("left", (- PPNbodyMargin.left) );
-			$(".popin-voile").css("width", $("html").width());
-			
-		} else {
-			$("html, body").css("overflow", "hidden");
-		}
+		$(".popin-voile").css("top", 0).css("position", "fixed");
+		
+		$("html, body").css("overflow", "hidden");
 	
 		// Affichage du voile
-		$(".popin-voile").animate({opacity:settings.opacity, height:((ie6 == true) ? (PPNbodyHeight + PPNbodyMargin.top + PPNbodyMargin.bottom) : "100%")}, function() {
+		$(".popin-voile").animate({opacity:settings.opacity, height: "100%"}, function() {
 		
 			// Loader
 			$(".popin-voile").css("background-image", "url('"+settings.loaderImg+"')");
@@ -364,17 +331,10 @@ jQuery.fn.popin = function(o) {
 																			- 	parseInt($(".popin").css("padding-bottom"))
 																			)
 										;
-					if(ie6 == true) {
-						$(".popin")		.css("position",					"absolute")
-										.css("margin-top",					0)
-										;
-					}
-					else {
-						$(".popin")		.css("position",					"fixed")
+					$(".popin")		.css("position",					"fixed")
 										.css("top",							"50%")
 										.css("margin-top",					-(settings.height/2))
-										;
-					}		
+										;	
 					
 					// Chargement du contenu
 					$(".popin-content").html(m);
@@ -386,9 +346,6 @@ jQuery.fn.popin = function(o) {
 					$(".popin-voile").css("background-image", "");
 					
 					// Affichage
-					if(ie6 == true) {
-						$(".popin").css("top", parseInt($(".popin").css("top")) - PPNbodyTop );
-					}
 					$(".popin").fadeIn("slow", function() {
 						if(settings.onComplete != null) {
 							settings.onComplete();
@@ -421,15 +378,7 @@ jQuery.fn.popin = function(o) {
 			$(".popin-voile").animate({opacity:0, height:0}, function() {
 			
 				// Suppression du voile & Déverrouillage du scroll	
-				if(ie6 == true) {
-					$("html, body").css("height", "auto");
-					$("html, body").css("overflow", "auto");
-					$("html, body").css("overflow-x", "hidden");
-					$("body").css("top", 0);
-					window.scrollTo(0, (PPNhtmlScroll) );
-				} else {
-					$("html, body").css("overflow", "auto");
-				}
+				$("html, body").css("overflow", "auto");
 				$(".popin, .popin-voile").remove();
 				
 				if(settings.onExit != null) {

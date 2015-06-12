@@ -11,12 +11,14 @@ from handlers.base import BaseHandler
 from handlers.chart import ChartHandler
 from handlers.edit import AddOrUpdateHandler, RemoveHandler, TaxRatioHandler
 from handlers.tag import AllTagsHandler, TagsHandler
+from handlers.upload import BankStatementUploadFormHandler
 from django.utils import simplejson
 
 webapp.template.register_template_library('common.templatefilters')
 
 application = webapp.WSGIApplication(
                                      [('/', BaseHandler),
+                                      ('/telecharger', BankStatementUploadFormHandler),
                                       ('/comptes', AccountHandler),
                                       ('/depense', AddOrUpdateHandler),
                                       ('/supprimer', RemoveHandler),

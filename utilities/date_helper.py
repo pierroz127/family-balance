@@ -28,20 +28,6 @@ def get_month_label(month):
     else:
         return ''  
 
-def get_all_months():
-    return  [{'Name':'JANVIER', 'Value':1},
-             {'Name':'FEVRIER', 'Value':2},
-             {'Name':'MARS', 'Value':3},
-             {'Name':'AVRIL', 'Value':4},
-             {'Name':'MAI', 'Value':5},
-             {'Name':'JUIN', 'Value':6},
-             {'Name':'JUILLET', 'Value':7},
-             {'Name':'AOUT', 'Value':8},
-             {'Name':'SEPTEMBRE', 'Value':9},
-             {'Name':'OCTOBRE', 'Value':10},
-             {'Name':'NOVEMBRE', 'Value':11},
-             {'Name':'DECEMBRE', 'Value':12}]
-
 def get_next_month(month):
     if month >= 12:
         return 1
