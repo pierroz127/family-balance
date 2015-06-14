@@ -3,7 +3,6 @@ import os
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
-#from appengine_utilities import sessions
 from utilities import date_helper, users_helper
 from utilities.user_expenses import UserExpenses
 from datetime import datetime
@@ -57,3 +56,4 @@ class AccountHandler(webapp.RequestHandler):
         logging.info("_balanceSession = "+ cookie_value)
         self.response.headers.add_header('Set-Cookie', '_balanceSession=' + cookie_value + ';path=/;max-age=' + str(7*24*3600) + ';')
         self.response.out.write(template.render(path, template_values))
+

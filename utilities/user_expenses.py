@@ -39,6 +39,10 @@ class UserExpenses:
         return self.totaladvance + self.totalcommon + self.totalpersonal + self.totaltax
 
     @classmethod
+    def getKey(expense):
+        return expense.date
+
+    @classmethod
     def compute_balance(cls, users_expenses, month, year):
         if len(users_expenses) == 0:
             # nothing to do
@@ -143,6 +147,7 @@ class UserExpenses:
 
         for usr in users_expenses.keys():
             users_expenses[usr].taxratio = cls.get_tax_ratio(usr, year)
+            users_expenses[usr].expenses = sorted(users_expenses[usr].expenses, key=lambda e: e.date)
 
         return users_expenses.values()
 
