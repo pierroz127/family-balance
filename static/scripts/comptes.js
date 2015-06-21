@@ -6,9 +6,9 @@ function changeDate() {
     window.location.href = '/comptes?mois=' + month + '&annee=' + year;
 }
 
-function remove(urlsafe, month, year) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette dépenses de vos comptes ?')) {
-		window.location.href = '/supprimer?urlsafe=' + urlsafe + '&mois=' + month + '&annee=' + year;
+function removeExpense(urlsafe, month, year, category, amount ) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer la dépense\n' + category + ' - ' + amount + ' EUR\nde vos comptes ?')) {
+        window.location.href = '/supprimer?urlsafe=' + urlsafe + '&mois=' + month + '&annee=' + year;
     }
 }
 
@@ -25,12 +25,15 @@ function initMonthRange() {
 
 function initOnRemoveClick() {
     $('.remove').click(function(e) {
-        var key = $(e.target).parent().parent().parent().find('.exp-key').html();
+        var row = $(e.target).parent().parent();
+        var key = row.find('.exp-key').html();
+        var name = row.find('.exp-category').children().first().html();
+        var amount = row.find('.exp-amount').html();
         var selectMonth = $('#month');
         var month = parseInt(selectMonth.html());
         var year = parseInt($('#year').html());
         //year = selectYear.options[selectYear.selectedIndex].value;
-        remove(key, month, year);
+        removeExpense(key, month, year, name, amount);
     });
 }
 
