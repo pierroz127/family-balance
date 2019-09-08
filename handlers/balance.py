@@ -64,13 +64,5 @@ class BalancesHandler(webapp.RequestHandler):
         cookie = cookie[idx + 1:]
         logging.info("after month, cookie=" + cookie)
 
-        #read year
-        #idx = cookie.find("#")
-        #logging.info(idx)
-        #logging.info(cookie[:idx])
         res["year"] = int(cookie)
-        #cookie = cookie[idx + 1:]
-
-        #read month name
-        #res["monthname"] = cookie
         return res

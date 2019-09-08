@@ -40,7 +40,7 @@ class AccountHandler(webapp.RequestHandler):
             #'selectedmonthname': month_name,
             'selectedyear': year,
             'month_range': months,
-            'year_range': range(2009, dtnow.year + 1),
+            'year_range': range(2009, dtnow.year + 6),
             'usersexpenses': users_expenses,
             'status_maxuser': status['maxuser'],
             'status_minuser': status['minuser'],

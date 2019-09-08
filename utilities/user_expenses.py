@@ -145,11 +145,13 @@ class UserExpenses:
                     x += 1
             logging.info('%d expenses with no ancestor', x)
 
-        for usr in users_expenses.keys():
-            users_expenses[usr].taxratio = cls.get_tax_ratio(usr, year)
-            users_expenses[usr].expenses = sorted(users_expenses[usr].expenses, key=lambda e: e.date)
+            for usr in users_expenses.keys():
+                users_expenses[usr].taxratio = cls.get_tax_ratio(usr, year)
+                users_expenses[usr].expenses = sorted(users_expenses[usr].expenses, key=lambda e: e.date)
+            
+            return[ users_expenses[currentUser] ] + filter(lambda usrexp: usrexp.user != currentUser, users_expenses.values())
 
-        return users_expenses.values()
+        return []
 
     @classmethod
     def compute_year_balances(cls, year):
